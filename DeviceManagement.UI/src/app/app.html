@@ -1,0 +1,14 @@
+<nav class="navbar">
+  <a class="navbar-brand" routerLink="/devices">Device Manager</a>
+
+  @if (authService.currentUser(); as user) {
+    <div class="navbar-right">
+      <span class="navbar-user">{{ user.name }}</span>
+      <button (click)="logout()" class="btn-logout">Deconectare</button>
+    </div>
+  }
+</nav>
+
+<main class="container">
+  <router-outlet />
+</main>

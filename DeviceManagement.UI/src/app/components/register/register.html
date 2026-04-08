@@ -1,0 +1,41 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h1>Cont nou</h1>
+    <p class="subtitle">Creează-ți un cont</p>
+
+    @if (error()) {
+      <div class="alert alert-error">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="register()">
+      <div class="field">
+        <label for="name">Nume complet *</label>
+        <input id="name" formControlName="name" type="text" placeholder="Prenume Nume" [class.invalid]="isInvalid('name')" />
+        @if (isInvalid('name')) { <span class="error-msg">Câmp obligatoriu</span> }
+      </div>
+
+      <div class="field">
+        <label for="email">Email *</label>
+        <input id="email" formControlName="email" type="email" placeholder="email@exemplu.com" [class.invalid]="isInvalid('email')" />
+        @if (isInvalid('email')) { <span class="error-msg">Email valid obligatoriu</span> }
+      </div>
+
+      <div class="field">
+        <label for="password">Parolă *</label>
+        <input id="password" formControlName="password" type="password" placeholder="Minim 6 caractere" [class.invalid]="isInvalid('password')" />
+        @if (isInvalid('password')) { <span class="error-msg">Minim 6 caractere</span> }
+      </div>
+
+      <div class="field">
+        <label for="location">Locație</label>
+        <input id="location" formControlName="location" type="text" placeholder="ex: București, Cluj-Napoca" />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="loading()">
+        {{ loading() ? 'Se creează contul...' : 'Creează cont' }}
+      </button>
+    </form>
+
+    <p class="auth-link">Ai deja cont? <a routerLink="/login">Autentifică-te</a></p>
+  </div>
+</div>

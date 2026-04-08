@@ -1,0 +1,89 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Dispozitive</h1>
+    <a routerLink="/devices/new" class="btn btn-primary">+ Dispozitiv nou</a>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Se încarcă...</div>
+  }
+
+  @if (error()) {
+    <div class="alert alert-error">{{ error() }}</div>
+  }
+
+  @if (!loading() && !error()) {
+    @if (devices().length === 0) {
+      <div class="empty">Nu există dispozitive înregistrate.</div>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Nume</th>
+              <th>Producător</th>
+              <th>Tip</th>
+              <th>OS</th>
+              <th>RAM</th>
+              <th>Utilizator</th>
+              <th>Acțiuni</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (device of devices(); track device.id) {
+              <tr>
+                <td>
+                  <button class="device-name-btn" (click)="openDescriptionModal(device)">{{ device.name }}</button>
+                </td>
+                <td>{{ device.manufacturer }}</td>
+                <td><span class="badge">{{ device.type }}</span></td>
+                <td>{{ device.os }} {{ device.osVersion }}</td>
+                <td>{{ device.ramAmount }} GB</td>
+                <td>{{ getUserName(device.userId) }}</td>
+                <td class="actions">
+                  <a [routerLink]="['/devices', device.id]" class="btn btn-sm">Detalii</a>
+                  <a [routerLink]="['/devices', device.id, 'edit']" class="btn btn-sm btn-secondary">Editează</a>
+
+                  @if (!device.userId) {
+                    <button (click)="assign(device)" class="btn btn-sm btn-assign">Asignează-mi</button>
+                  } @else if (device.userId === currentUserId) {
+                    <button (click)="unassign(device)" class="btn btn-sm btn-unassign">Dezasignează</button>
+                  }
+
+                  <button (click)="deleteDevice(device.id!)" class="btn btn-sm btn-danger">Șterge</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  @if (modalOpen()) {
+    <div class="modal-backdrop" (click)="closeDescriptionModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Descriere AI</h2>
+          <button class="modal-close" (click)="closeDescriptionModal()">✕</button>
+        </div>
+
+        @if (selectedDevice(); as selected) {
+          <p class="modal-subtitle">{{ selected.manufacturer }} {{ selected.name }} ({{ selected.type }})</p>
+        }
+
+        @if (aiLoading()) {
+          <div class="loading">Se generează descrierea...</div>
+        }
+
+        @if (aiError()) {
+          <div class="alert alert-error">{{ aiError() }}</div>
+        }
+
+        @if (aiDescription()) {
+          <p class="ai-description">{{ aiDescription() }}</p>
+        }
+      </div>
+    </div>
+  }
+</div>

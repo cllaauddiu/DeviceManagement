@@ -1,0 +1,92 @@
+<div class="page">
+  <div class="page-header">
+    <a routerLink="/devices" class="back-link">← Înapoi la listă</a>
+    <h1>{{ isEditMode() ? 'Editează dispozitiv' : 'Dispozitiv nou' }}</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Se încarcă...</div>
+  }
+
+  @if (!loading()) {
+    @if (error()) {
+      <div class="alert alert-error">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="form-card">
+      <div class="form-grid">
+
+        <div class="field">
+          <label for="name">Nume *</label>
+          <input id="name" formControlName="name" type="text" placeholder="ex: Galaxy S23" [class.invalid]="isInvalid('name')" />
+          @if (isInvalid('name')) { <span class="error-msg">Câmp obligatoriu</span> }
+        </div>
+
+        <div class="field">
+          <label for="manufacturer">Producător *</label>
+          <input id="manufacturer" formControlName="manufacturer" type="text" placeholder="ex: Samsung" [class.invalid]="isInvalid('manufacturer')" />
+          @if (isInvalid('manufacturer')) { <span class="error-msg">Câmp obligatoriu</span> }
+        </div>
+
+        <div class="field">
+          <label for="type">Tip *</label>
+          <select id="type" formControlName="type" [class.invalid]="isInvalid('type')">
+            <option value="">-- Selectează --</option>
+            @for (t of deviceTypes; track t) {
+              <option [value]="t">{{ t }}</option>
+            }
+          </select>
+          @if (isInvalid('type')) { <span class="error-msg">Câmp obligatoriu</span> }
+        </div>
+
+        <div class="field">
+          <label for="os">Sistem de operare *</label>
+          <input id="os" formControlName="os" type="text" placeholder="ex: Android" [class.invalid]="isInvalid('os')" />
+          @if (isInvalid('os')) { <span class="error-msg">Câmp obligatoriu</span> }
+        </div>
+
+        <div class="field">
+          <label for="osVersion">Versiune OS *</label>
+          <input id="osVersion" formControlName="osVersion" type="text" placeholder="ex: 14" [class.invalid]="isInvalid('osVersion')" />
+          @if (isInvalid('osVersion')) { <span class="error-msg">Câmp obligatoriu</span> }
+        </div>
+
+        <div class="field">
+          <label for="processor">Procesor *</label>
+          <input id="processor" formControlName="processor" type="text" placeholder="ex: Snapdragon 8 Gen 2" [class.invalid]="isInvalid('processor')" />
+          @if (isInvalid('processor')) { <span class="error-msg">Câmp obligatoriu</span> }
+        </div>
+
+        <div class="field">
+          <label for="ramAmount">RAM (GB) *</label>
+          <input id="ramAmount" formControlName="ramAmount" type="number" min="1" placeholder="ex: 8" [class.invalid]="isInvalid('ramAmount')" />
+          @if (isInvalid('ramAmount')) { <span class="error-msg">Valoare validă obligatorie (min 1)</span> }
+        </div>
+
+        <div class="field">
+          <label for="userId">Utilizator asignat</label>
+          <select id="userId" formControlName="userId">
+            <option value="">-- Niciun utilizator --</option>
+            @for (user of users(); track user.id) {
+              <option [value]="user.id">{{ user.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field full-width">
+          <label for="description">Descriere *</label>
+          <textarea id="description" formControlName="description" rows="3" placeholder="Descriere dispozitiv..." [class.invalid]="isInvalid('description')"></textarea>
+          @if (isInvalid('description')) { <span class="error-msg">Câmp obligatoriu</span> }
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/devices" class="btn btn-secondary">Anulează</a>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          {{ saving() ? 'Se salvează...' : (isEditMode() ? 'Salvează modificările' : 'Creează dispozitiv') }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

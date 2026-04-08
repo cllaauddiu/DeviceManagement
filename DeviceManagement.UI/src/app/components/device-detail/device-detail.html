@@ -1,0 +1,66 @@
+<div class="page">
+  <div class="page-header">
+    <a routerLink="/devices" class="back-link">← Înapoi la listă</a>
+  </div>
+
+  @if (loading()) { <div class="loading">Se încarcă...</div> }
+  @if (error()) { <div class="alert alert-error">{{ error() }}</div> }
+
+  @if (device(); as d) {
+    <div class="detail-header">
+      <div>
+        <h1>{{ d.name }}</h1>
+        <span class="badge">{{ d.type }}</span>
+      </div>
+      <div class="header-actions">
+        @if (!d.userId) {
+          <button (click)="assign()" class="btn btn-assign">Asignează-mi</button>
+        } @else if (d.userId === currentUserId) {
+          <button (click)="unassign()" class="btn btn-unassign">Dezasignează</button>
+        }
+        <a [routerLink]="['/devices', d.id, 'edit']" class="btn btn-secondary">Editează</a>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h2>Specificații hardware</h2>
+        <dl>
+          <dt>Producător</dt><dd>{{ d.manufacturer }}</dd>
+          <dt>Procesor</dt><dd>{{ d.processor }}</dd>
+          <dt>RAM</dt><dd>{{ d.ramAmount }} GB</dd>
+        </dl>
+      </div>
+
+      <div class="card">
+        <h2>Software</h2>
+        <dl>
+          <dt>Sistem de operare</dt><dd>{{ d.os }}</dd>
+          <dt>Versiune OS</dt><dd>{{ d.osVersion }}</dd>
+        </dl>
+      </div>
+
+      <div class="card">
+        <h2>Utilizator asignat</h2>
+        @if (assignedUser(); as u) {
+          <dl>
+            <dt>Nume</dt><dd>{{ u.name }}</dd>
+            <dt>Rol</dt><dd>{{ u.role }}</dd>
+            <dt>Locație</dt><dd>{{ u.location }}</dd>
+          </dl>
+        } @else if (d.userId) {
+          <p class="muted">Utilizator ID: {{ d.userId }}</p>
+        } @else {
+          <p class="muted">Niciun utilizator asignat</p>
+        }
+      </div>
+
+      @if (d.description) {
+        <div class="card full-width">
+          <h2>Descriere</h2>
+          <p>{{ d.description }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

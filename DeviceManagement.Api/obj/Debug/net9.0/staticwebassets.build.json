@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "bRa+22/sBrXn5/8pLp2u2+QToapeLfEPz6wMq5t6D9s=",
+  "Source": "DeviceManagement.Api",
+  "BasePath": "_content/DeviceManagement.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

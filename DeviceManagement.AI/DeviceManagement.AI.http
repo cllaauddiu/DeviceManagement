@@ -1,0 +1,17 @@
+@DeviceManagement.AI_HostAddress = http://localhost:5160
+
+POST {{DeviceManagement.AI_HostAddress}}/api/descriptions/generate
+Content-Type: application/json
+
+{
+	"brand": "Dell",
+	"model": "Latitude 7440",
+	"type": "Laptop",
+	"cpu": "Intel Core i7-1365U",
+	"ramGb": 16,
+	"storageGb": 512,
+	"operatingSystem": "Windows 11 Pro",
+	"notes": "Business ultrabook with long battery life"
+}
+
+###

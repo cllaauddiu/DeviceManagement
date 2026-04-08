@@ -1,0 +1,49 @@
+services:
+  device-management-api:
+    build:
+      context: .
+      dockerfile: DeviceManagement.Api/Dockerfile
+    container_name: device-management-api
+    ports:
+      - "5157:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MongoDbSettings__ConnectionString=${MONGO_CONNECTION_STRING}
+      - MongoDbSettings__DatabaseName=${MONGO_DATABASE_NAME:-DeviceManagementDB}
+    networks:
+      - microservices-net
+
+  device-management-ai:
+    build:
+      context: .
+      dockerfile: DeviceManagement.AI/Dockerfile
+    container_name: device-management-ai
+    ports:
+      - "5160:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AiSettings__GeminiBaseUrl=${GEMINI_BASE_URL:-https://generativelanguage.googleapis.com}
+      - AiSettings__GeminiApiVersion=${GEMINI_API_VERSION:-v1beta}
+      - AiSettings__GeminiModel=${GEMINI_MODEL:-gemini-2.5-flash}
+      - AiSettings__GeminiApiKey=${GEMINI_API_KEY}
+      - AiSettings__Temperature=${GEMINI_TEMPERATURE:-0.4}
+      - AiSettings__MaxOutputTokens=${GEMINI_MAX_OUTPUT_TOKENS:-140}
+    networks:
+      - microservices-net
+
+  device-management-ui:
+    build:
+      context: ./DeviceManagement.UI
+      dockerfile: Dockerfile
+    container_name: device-management-ui
+    ports:
+      - "4200:4000"
+    depends_on:
+      - device-management-api
+      - device-management-ai
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
+    driver: bridge
