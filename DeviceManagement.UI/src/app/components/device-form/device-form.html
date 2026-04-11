@@ -73,12 +73,6 @@
           </select>
         </div>
 
-        <div class="field full-width">
-          <label for="description">Descriere *</label>
-          <textarea id="description" formControlName="description" rows="3" placeholder="Descriere dispozitiv..." [class.invalid]="isInvalid('description')"></textarea>
-          @if (isInvalid('description')) { <span class="error-msg">Câmp obligatoriu</span> }
-        </div>
-
       </div>
 
       <div class="form-actions">

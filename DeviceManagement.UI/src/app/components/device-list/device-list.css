@@ -1,3 +1,35 @@
+.search-panel {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.search-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.search-input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #0f172a;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.search-meta {
+  font-size: 13px;
+  color: #64748b;
+}
+
 .table-wrapper {
   overflow-x: auto;
 }

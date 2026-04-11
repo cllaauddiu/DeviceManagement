@@ -27,6 +27,7 @@ export class DeviceFormComponent implements OnInit {
   loading = signal(true);
   saving = signal(false);
   error = signal<string | null>(null);
+  existingDescription = signal('');
 
   form = this.fb.group({
     name:         ['', Validators.required],
@@ -36,7 +37,6 @@ export class DeviceFormComponent implements OnInit {
     osVersion:    ['', Validators.required],
     processor:    ['', Validators.required],
     ramAmount:    [null as number | null, [Validators.required, Validators.min(1)]],
-    description:  ['', Validators.required],
     userId:       ['' as string | null]
   });
 
@@ -71,9 +71,9 @@ export class DeviceFormComponent implements OnInit {
             osVersion: d.osVersion,
             processor: d.processor,
             ramAmount: d.ramAmount,
-            description: d.description,
             userId: d.userId ?? null
           });
+          this.existingDescription.set(d.description ?? '');
         }
         this.loading.set(false);
       },
@@ -113,7 +113,7 @@ export class DeviceFormComponent implements OnInit {
       osVersion:    this.form.value.osVersion!.trim(),
       processor:    this.form.value.processor!.trim(),
       ramAmount:    this.form.value.ramAmount!,
-      description:  this.form.value.description!.trim(),
+      description:  this.isEditMode() ? this.existingDescription() : '',
       userId:       this.form.value.userId || undefined
     };
 

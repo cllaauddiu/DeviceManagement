@@ -13,6 +13,10 @@ export class DeviceService {
     return this.http.get<Device[]>(this.url);
   }
 
+  search(query: string): Observable<Device[]> {
+    return this.http.get<Device[]>(`${this.url}/search`, { params: { q: query } });
+  }
+
   getById(id: string): Observable<Device> {
     return this.http.get<Device>(`${this.url}/${id}`);
   }

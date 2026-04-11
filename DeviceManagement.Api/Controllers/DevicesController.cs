@@ -22,6 +22,10 @@ public class DevicesController : ControllerBase
     public async Task<ActionResult<List<Device>>> GetAll() =>
         Ok(await _deviceService.GetAllAsync());
 
+    [HttpGet("search")]
+    public async Task<ActionResult<List<Device>>> Search([FromQuery] string q) =>
+        Ok(await _deviceService.SearchAsync(q));
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Device>> GetById(string id)
     {

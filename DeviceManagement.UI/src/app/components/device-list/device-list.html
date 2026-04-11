@@ -13,6 +13,30 @@
   }
 
   @if (!loading() && !error()) {
+    <div class="search-panel">
+      <label for="device-search" class="search-label">Caută dispozitiv</label>
+      <input
+        id="device-search"
+        type="text"
+        class="search-input"
+        placeholder="Nume, producător, procesor, RAM..."
+        [value]="searchQuery()"
+        (input)="onSearchInput($any($event.target).value)"
+      />
+
+      <div class="search-meta">
+        @if (searching()) {
+          <span>Se caută...</span>
+        } @else {
+          <span>{{ devices().length }} rezultat(e)</span>
+        }
+      </div>
+
+      @if (searchError()) {
+        <div class="alert alert-error">{{ searchError() }}</div>
+      }
+    </div>
+
     @if (devices().length === 0) {
       <div class="empty">Nu există dispozitive înregistrate.</div>
     } @else {

@@ -126,6 +126,121 @@ public class DevicesControllerTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    [Fact]
+    public async Task Search_RanksResultsByRelevance_DeterministicOrder()
+    {
+        await CreateDeviceAsync(new Device
+        {
+            Name = "Galaxy S23",
+            Manufacturer = "Samsung",
+            Type = "phone",
+            OS = "Android",
+            OSVersion = "14",
+            Processor = "Snapdragon 8 Gen 2",
+            RamAmount = 8,
+            Description = ""
+        });
+
+        await CreateDeviceAsync(new Device
+        {
+            Name = "Office Phone",
+            Manufacturer = "Samsung",
+            Type = "phone",
+            OS = "Android",
+            OSVersion = "13",
+            Processor = "Snapdragon 7",
+            RamAmount = 8,
+            Description = ""
+        });
+
+        await CreateDeviceAsync(new Device
+        {
+            Name = "ThinkPad X1",
+            Manufacturer = "Lenovo",
+            Type = "laptop",
+            OS = "Windows",
+            OSVersion = "11",
+            Processor = "Intel Core i7",
+            RamAmount = 16,
+            Description = ""
+        });
+
+        var results = await _client.GetFromJsonAsync<List<Device>>("/api/devices/search?q=galaxy samsung 8gb");
+
+        Assert.NotNull(results);
+        Assert.True(results!.Count >= 2);
+        Assert.Equal("Galaxy S23", results[0].Name);
+        Assert.Contains(results, d => d.Name == "Office Phone");
+        Assert.DoesNotContain(results, d => d.Name == "ThinkPad X1");
+    }
+
+    [Fact]
+    public async Task Search_IsCaseInsensitive_AndIgnoresPunctuationAndExtraSpaces()
+    {
+        await CreateDeviceAsync(new Device
+        {
+            Name = "Pixel 8",
+            Manufacturer = "Google",
+            Type = "phone",
+            OS = "Android",
+            OSVersion = "14",
+            Processor = "Tensor G3",
+            RamAmount = 8,
+            Description = ""
+        });
+
+        var results = await _client.GetFromJsonAsync<List<Device>>("/api/devices/search?q=   TENSOR,,,   g3!!!   ");
+
+        Assert.NotNull(results);
+        Assert.Single(results!);
+        Assert.Equal("Pixel 8", results[0].Name);
+    }
+
+    [Fact]
+    public async Task Search_MatchesRamField()
+    {
+        await CreateDeviceAsync(new Device
+        {
+            Name = "Workstation A",
+            Manufacturer = "Dell",
+            Type = "desktop",
+            OS = "Windows",
+            OSVersion = "11",
+            Processor = "Intel Xeon",
+            RamAmount = 32,
+            Description = ""
+        });
+
+        await CreateDeviceAsync(new Device
+        {
+            Name = "Workstation B",
+            Manufacturer = "Dell",
+            Type = "desktop",
+            OS = "Windows",
+            OSVersion = "11",
+            Processor = "Intel Xeon",
+            RamAmount = 16,
+            Description = ""
+        });
+
+        var results = await _client.GetFromJsonAsync<List<Device>>("/api/devices/search?q=32GB");
+
+        Assert.NotNull(results);
+        Assert.Single(results!);
+        Assert.Equal("Workstation A", results[0].Name);
+    }
+
+    [Fact]
+    public async Task Search_EmptyQuery_ReturnsEmptyList()
+    {
+        await CreateDeviceAsync(MakeDevice("Device A"));
+
+        var results = await _client.GetFromJsonAsync<List<Device>>("/api/devices/search?q=   ");
+
+        Assert.NotNull(results);
+        Assert.Empty(results!);
+    }
+
     private async Task<Device> CreateDeviceAsync(Device device)
     {
         var response = await _client.PostAsJsonAsync("/api/devices", device);

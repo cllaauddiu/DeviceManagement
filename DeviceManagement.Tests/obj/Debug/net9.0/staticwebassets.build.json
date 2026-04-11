@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "xb4+3bKzjqCBzyE3rdPitKggVM61KxKTtKnuyrhAPyE=",
+  "Hash": "qMi7TXhxYIowHIVlPtzSNj17xY2ajXcW+jLgprA4sNU=",
   "Source": "DeviceManagement.Tests",
   "BasePath": "_content/DeviceManagement.Tests",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\claud\\Desktop\\DeviceManager\\DeviceManagement.Api\\DeviceManagement.Api.csproj",
+      "Identity": "C:\\Users\\claud\\Desktop\\DeviceManagement\\DeviceManagement.Api\\DeviceManagement.Api.csproj",
       "Version": 2,
       "Source": "DeviceManagement.Api",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
